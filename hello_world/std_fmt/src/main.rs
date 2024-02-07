@@ -55,6 +55,20 @@ fn main() {
     println!("{}", make_string(927, "label"));
 
     // Formatting Parameters
+
+    // Width
+    // All of these print "Hello x     !"
+    println!("Hello {:5}!", "x");
+    println!("Hello {:1$}!", "x", 5);
+    println!("Hello {1:0$}!", 5, "x");
+    println!("Hello {:width$}!", "x", width = 5);
+    let width = 5;
+    println!("Hello {:width$}!", "x");
+
+    // bits
+    println!("{:0width$b}", 2, width = 20);
+    println!("{:0width$b}", 5, width = 64);
+    println!("{:0width$b}", 7, width = 128);
 }
 
 fn make_string(a: u32, b: &str) -> String {
