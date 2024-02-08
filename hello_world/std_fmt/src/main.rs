@@ -69,6 +69,51 @@ fn main() {
     println!("{:0width$b}", 2, width = 20);
     println!("{:0width$b}", 5, width = 64);
     println!("{:0width$b}", 7, width = 128);
+
+    // Fill/Alignment: https://doc.rust-lang.org/std/fmt/#fillalignment
+    let result = format!("Hello {:<5}!", "x");
+    println!("{}", result);
+
+    let result = format!("Hello {:-<5}!", "x");
+    println!("{}", result);
+
+    let result = format!("Hello {:n<5}!", "x");
+    println!("{}", result);
+
+    let result = format!("Hello {:0<5}!", "x");
+    println!("{}", result);
+
+    let result = format!("Hello {:^5}!", "x");
+    println!("{}", result);
+
+    let result = format!("Hello {:>5}!", "x");
+    println!("{}", result);
+
+    let result = format!("Hello {:n>5}!", "x");
+    println!("{}", result);
+
+    // [fill] `<` - the argument is left-aligned in width columns
+    let result = format!("Hey {:-<10}!", "you");
+    println!("{}", result);
+    // [fill] `^` - the argument is center-aligned in width columns
+    let result = format!("Hey {:-^10}!", "you");
+    println!("{}", result);
+    let result = format!("Hey {:-^11}!", "you");
+    println!("{}", result);
+    // [fill] `>` - the argument is right-alined in width columns
+    let result = format!("Hey {:->10}!", "you");
+    println!("{}", result);
+
+    println!("Hello {:^15}!", format!("{:?}", Some("hi"))); // => "Hello   Some("hi")   !"
+
+    println!("{:>5}!", "Amy");
+    println!("{:>5}!", 45);
+    println!("{:>5?}!", "Amy");
+    println!("{:>5?}!", 45);
+    println!("{:>5}!", format!("{:?}", "Amy"));
+    println!("{:>5}!", format!("{:?}", 45));
+
+    // Sign/`#`/`0`
 }
 
 fn make_string(a: u32, b: &str) -> String {
