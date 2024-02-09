@@ -1,3 +1,8 @@
+#[derive(Debug)]
+enum Game {
+    Player,
+}
+
 fn main() {
     // Usage
     let result = format!("Hello");
@@ -114,6 +119,41 @@ fn main() {
     println!("{:>5}!", format!("{:?}", 45));
 
     // Sign/`#`/`0`
+    let result = format!("Hello {:+}!", 5);
+    println!("{}", result);
+
+    let result = format!("{:#x}!", 27);
+    println!("{}", result);
+
+    let result = format!("Hello {:05}!", 5);
+    println!("{}", result);
+
+    let result = format!("Hello {:05}!", -5);
+    println!("{}", result);
+
+    let result = format!("{:#010x}!", 27);
+    println!("{}", result);
+
+    let p_number = 5i8; // 0b0101
+    let n_number = -5i8;
+
+    // + flag
+    println!("\n\n{:+}", p_number);
+    println!("{:+}", n_number);
+
+    // # flag
+    println!("\n\n{:#08b}", p_number);
+    println!("{:#08b}", n_number);
+    println!("{:?}", Game::Player);
+    println!("{:#?}", Game::Player);
+    println!("{:#x}", 0x00ff);
+    println!("{:#X}", 0x00ff);
+    println!("{:#b}", 0x00ff);
+    println!("{:#o}", 0x00ff);
+    println!("{:#}", 0x00ff);
+    println!("{}", 0x00ff);
+
+    // Precision
 }
 
 fn make_string(a: u32, b: &str) -> String {
