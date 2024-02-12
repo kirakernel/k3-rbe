@@ -1,6 +1,51 @@
+use std::fmt::{self, Binary, Display, Formatter};
+use std::io::{self, Write};
+
 #[derive(Debug)]
 enum Game {
     Player,
+}
+
+#[derive(Debug)]
+#[allow(unused_variables)]
+struct Triangle {
+    a: f32,
+    b: f32,
+    c: f32,
+}
+
+impl Display for Triangle {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "({}, {}, {})", self.a, self.b, self.c)
+    }
+}
+
+#[derive(Debug)]
+struct Vector2D {
+    x: isize,
+    y: isize,
+}
+
+impl Display for Vector2D {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        // The f value implements the Write trait, which is what the
+        // write! macro is expecting. Note that this formatting ignores the
+        // various flags provided to format strings.
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+// Different traits allow different formas of ouput of a type. The meaning
+// of this format is to print the magnitude of a vector.
+impl Binary for Vector2D {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        let magnitude = (self.x * self.x + self.y * self.y) as f64;
+        let magnitude = magnitude.sqrt();
+
+        let decimals = f.precision().unwrap_or(3);
+        let string = format!("{magnitude:.decimals$}");
+        f.pad_integral(true, "", &string)
+    }
 }
 
 fn main() {
@@ -205,8 +250,69 @@ fn main() {
     // println!("{{}}", variable);
 
     // Syntax - https://doc.rust-lang.org/std/fmt/#syntax
+    // ...
+
+    // Formatting traits
+    let a = 3f32;
+    let b = 4f32;
+    let c = 5f32;
+    let triangle = Triangle { a, b, c };
+    println!("\n\n{:?}", triangle);
+
+    println!("\n\n{}", triangle);
+
+    let pythagorean_triple = Triangle {
+        a: 3.0,
+        b: 4.0,
+        c: 5.0,
+    };
+    let result = format!("\n\n{pythagorean_triple}");
+    println!("{}", result);
+
+    let myvector = Vector2D { x: 3, y: 4 };
+
+    println!("\n\n{myvector}"); // => "(3, 4)"
+    println!("{myvector:?}"); // => "Vector2D {x: 3, y:4}"
+    println!("{myvector:10.3b}"); // => "     5.000"
+
+    // fmt::Display vs fmt::Debug - https://doc.rust-lang.org/std/fmt/#fmtdisplay-vs-fmtdebug
+    println!("\n\n{} {:?}", 3, 4);
+    println!("{} {:?}", 'a', 'b');
+    println!("{} {:?}", "foo\n", "bar\n");
+
+    // Related macros - https://doc.rust-lang.org/std/fmt/#related-macros
+    // write!
+    let mut w = Vec::new();
+    let a = write!(&mut w, "Hello {}!", "world");
+    println!("\n\n{:?}", a); //
+    println!("{:?}", w);
+
+    // print!
+    print!("\n\nHello {}!", "world");
+    println!("I have a newline {}", "character at the end");
+    println!("She is {:?}", "so cute and nice.");
+
+    // eprint!
+    eprint!("\n\nHello {}!", "world");
+    eprintln!("I have a newline {}", "character at the end");
+    eprintln!("She is {:?}", "so cute and nice.");
+
+    // format_args!
+    let mut some_writer = io::stdout();
+    println!("\n\n");
+    _ = write!(
+        &mut some_writer,
+        "{}",
+        format_args!("print with a {}", "macro")
+    );
+
+    my_fmt_fn(format_args!(", or a {} too", "function"));
 }
 
 fn make_string(a: u32, b: &str) -> String {
     format!("{b} {a}")
+}
+
+fn my_fmt_fn(args: fmt::Arguments<'_>) {
+    _ = write!(&mut io::stdout(), "{args}\n")
 }
